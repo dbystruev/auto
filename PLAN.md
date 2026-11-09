@@ -1,463 +1,317 @@
-# Social Sync — Comprehensive Implementation Plan
+# Social Sync — Progressive Implementation Plan
 
-This document outlines the step-by-step technical execution plan for building the **Social Sync** Kotlin Multiplatform application, Ktor JVM backend, Supabase database vault, and Vercel serverless cron infrastructure.
-
----
-
-## 🗂 High-Level Navigation Index (Level 1)
-
-* [#1. Database & Vault Subsystem Setup](#1-database--vault-subsystem-setup)
-* [#2. Shared KMP Core Module](#2-shared-kmp-core-module)
-* [#3. Ktor Backend Subsystem Setup](#3-ktor-backend-subsystem-setup)
-* [#4. Compose Multiplatform Client Application](#4-compose-multiplatform-client-application)
-* [#5. Deployment & Automation Infrastructure](#5-deployment--automation-infrastructure)
+This document provides a multi-level, progressively refined implementation plan for building the **Social Sync** Kotlin Multiplatform application, Ktor JVM backend, Supabase database vault, and Vercel serverless cron infrastructure.
 
 ---
 
-## 1. Database & Vault Subsystem Setup
+## Iteration Step 1: High-Level System Overview (Level 1)
 
-### 1.1 Local Supabase Environment Scaffolding (Level 2)
-* [#1.1.1 Directory Initialization](#111-directory-initialization)
-* [#1.1.2 Project Initialization](#112-project-initialization)
-
-### 1.2 Database Migrations (Level 2)
-* [#1.2.1 Core Relational Tables Migration](#121-core-relational-tables-migration)
-* [#1.2.2 Media Storage Migration](#122-media-storage-migration)
-
-### 1.3 Vault Encryption & Row-Level Security (Level 2)
-* [#1.3.1 Token Encryption Vault Setup](#131-token-encryption-vault-setup)
-* [#1.3.2 RLS Access Policies Configuration](#132-rls-access-policies-configuration)
+* [<a id="idx-1">1. Database & Vault Subsystem Setup</a>](#step2-sec-1)
+* [<a id="idx-2">2. Shared KMP Core Module</a>](#step2-sec-2)
+* [<a id="idx-3">3. Ktor Backend Subsystem Setup</a>](#step2-sec-3)
+* [<a id="idx-4">4. Compose Multiplatform Client Application</a>](#step2-sec-4)
+* [<a id="idx-5">5. Deployment & Infrastructure</a>](#step2-sec-5)
 
 ---
 
-### 1.1.1 Directory Initialization (Level 3)
-* [#1.1.1.1 Migration Folder Setup](#1111-migration-folder-setup)
+## Iteration Step 2: Subsystem Structural Outline (Levels 1 & 2)
 
-#### 1.1.1.1 Migration Folder Setup (Level 4)
-* [#1.1.1.1.1 Local Path Creation](#11111-local-path-creation)
+### <a id="step2-sec-1">1. Database & Vault Subsystem Setup</a>
+* [<a id="idx-1-1">1.1 Local Supabase Scaffolding</a>](#step3-sec-1-1)
+* [<a id="idx-1-2">1.2 Relational Database Schema & Storage Bucket</a>](#step3-sec-1-2)
+* [<a id="idx-1-3">1.3 PostgreSQL Vault Encryption & Row-Level Security</a>](#step3-sec-1-3)
 
-##### 1.1.1.1.1 Local Path Creation (Level 5)
-* [#1.1.1.1.1.1 Action Items](#111111-action-items)
+### <a id="step2-sec-2">2. Shared KMP Core Module</a>
+* [<a id="idx-2-1">2.1 Shared Module Gradle Scaffolding</a>](#step3-sec-2-1)
+* [<a id="idx-2-2">2.2 Data Transfer Objects (DTOs)</a>](#step3-sec-2-2)
+* [<a id="idx-2-3">2.3 Ktor Client Service Integration</a>](#step3-sec-2-3)
 
-###### 1.1.1.1.1.1 Action Items (Level 6)
-* <a id="step-1-1-1-1-1-1-1"></a>**Step 1.1.1.1.1.1.1:** Run command `mkdir -p supabase`
-* <a id="step-1-1-1-1-1-1-2"></a>**Step 1.1.1.1.1.1.2:** Run command `mkdir -p supabase/migrations`
+### <a id="step2-sec-3">3. Ktor Backend Subsystem Setup</a>
+* [<a id="idx-3-1">3.1 Ktor Backend Engine Scaffolding</a>](#step3-sec-3-1)
+* [<a id="idx-3-2">3.2 Security & Authentication Middleware</a>](#step3-sec-3-2)
+* [<a id="idx-3-3">3.3 API Route Controllers & Cron Worker</a>](#step3-sec-3-3)
 
----
+### <a id="step2-sec-4">4. Compose Multiplatform Client Application</a>
+* [<a id="idx-4-1">4.1 Compose Client Module Setup</a>](#step3-sec-4-1)
+* [<a id="idx-4-2">4.2 UI Screens & ViewModels</a>](#step3-sec-4-2)
+* [<a id="idx-4-3">4.3 Multiplatform Entry Points (Android, iOS, Web)</a>](#step3-sec-4-3)
 
-### 1.1.2 Project Initialization (Level 3)
-* [#1.1.2.1 Supabase CLI Initialization](#1121-supabase-cli-initialization)
-
-#### 1.1.2.1 Supabase CLI Initialization (Level 4)
-* [#1.1.2.1.1 Config Scaffolding](#11211-config-scaffolding)
-
-##### 1.1.2.1.1 Config Scaffolding (Level 5)
-* [#1.1.2.1.1.1 Action Items](#112111-action-items)
-
-###### 1.1.2.1.1.1 Action Items (Level 6)
-* <a id="step-1-1-2-1-1-1-1"></a>**Step 1.1.2.1.1.1.1:** Run command `supabase init`
-* <a id="step-1-1-2-1-1-1-2"></a>**Step 1.1.2.1.1.1.2:** Create file `supabase/config.toml` setting project ID to `social-sync-backend`
+### <a id="step2-sec-5">5. Deployment & Infrastructure</a>
+* [<a id="idx-5-1">5.1 Vercel Serverless & Cron Configuration</a>](#step3-sec-5-1)
+* [<a id="idx-5-2">5.2 Build Verification & Production Deployment</a>](#step3-sec-5-2)
 
 ---
 
-### 1.2.1 Core Relational Tables Migration (Level 3)
-* [#1.2.1.1 Integrations Table Migration](#1211-integrations-table-migration)
-* [#1.2.1.2 Posts Table Migration](#1212-posts-table-migration)
+## Iteration Step 3: Detailed Component Plan (Levels 1, 2 & 3)
 
-#### 1.2.1.1 Integrations Table Migration (Level 4)
-* [#1.2.1.1.1 Migration Script Creation](#12111-migration-script-creation)
+### 1. Database & Vault Subsystem Setup
 
-##### 1.2.1.1.1 Migration Script Creation (Level 5)
-* [#1.2.1.1.1.1 Action Items](#121111-action-items)
+#### <a id="step3-sec-1-1">1.1 Local Supabase Scaffolding</a>
+* [<a id="idx-1-1-1">1.1.1 Directory Structure Setup</a>](#step4-sec-1-1-1)
+* [<a id="idx-1-1-2">1.1.2 CLI Configuration & Project Setup</a>](#step4-sec-1-1-2)
 
-###### 1.2.1.1.1.1 Action Items (Level 6)
-* <a id="step-1-2-1-1-1-1-1"></a>**Step 1.2.1.1.1.1.1:** Create file `supabase/migrations/20260101000000_create_integrations.sql`
-* <a id="step-1-2-1-1-1-1-2"></a>**Step 1.2.1.1.1.1.2:** Update file `supabase/migrations/20260101000000_create_integrations.sql` adding `integrations` table SQL schema.
+#### <a id="step3-sec-1-2">1.2 Relational Database Schema & Storage Bucket</a>
+* [<a id="idx-1-2-1">1.2.1 Integrations Table Migration</a>](#step4-sec-1-2-1)
+* [<a id="idx-1-2-2">1.2.2 Posts & Target Publishing Tables Migration</a>](#step4-sec-1-2-2)
+* [<a id="idx-1-2-3">1.2.3 Media Storage Bucket Configuration</a>](#step4-sec-1-2-3)
 
-#### 1.2.1.2 Posts Table Migration (Level 4)
-* [#1.2.1.2.1 Posts Script Creation](#12121-posts-script-creation)
-
-##### 1.2.1.2.1 Posts Script Creation (Level 5)
-* [#1.2.1.2.1.1 Action Items](#121211-action-items)
-
-###### 1.2.1.2.1.1 Action Items (Level 6)
-* <a id="step-1-2-1-2-1-1-1"></a>**Step 1.2.1.2.1.1.1:** Create file `supabase/migrations/20260101000001_create_posts_and_targets.sql`
-* <a id="step-1-2-1-2-1-1-2"></a>**Step 1.2.1.2.1.1.2:** Update file `supabase/migrations/20260101000001_create_posts_and_targets.sql` adding `posts` and `post_targets` tables.
+#### <a id="step3-sec-1-3">1.3 PostgreSQL Vault Encryption & Row-Level Security</a>
+* [<a id="idx-1-3-1">1.3.1 Pgsodium Vault Encryption Setup</a>](#step4-sec-1-3-1)
+* [<a id="idx-1-3-2">1.3.2 Row Level Security (RLS) Isolation Policies</a>](#step4-sec-1-3-2)
 
 ---
 
-### 1.2.2 Media Storage Migration (Level 3)
-* [#1.2.2.1 Supabase Storage Bucket Setup](#1221-supabase-storage-bucket-setup)
+### 2. Shared KMP Core Module
 
-#### 1.2.2.1 Supabase Storage Bucket Setup (Level 4)
-* [#1.2.2.1.1 Bucket Script Creation](#12211-bucket-script-creation)
+#### <a id="step3-sec-2-1">2.1 Shared Module Gradle Scaffolding</a>
+* [<a id="idx-2-1-1">2.1.1 Shared Directory Tree Initialization</a>](#step4-sec-2-1-1)
+* [<a id="idx-2-1-2">2.1.2 Shared Module Build Dependencies</a>](#step4-sec-2-1-2)
 
-##### 1.2.2.1.1 Bucket Script Creation (Level 5)
-* [#1.2.2.1.1.1 Action Items](#122111-action-items)
+#### <a id="step3-sec-2-2">2.2 Data Transfer Objects (DTOs)</a>
+* [<a id="idx-2-2-1">2.2.1 Integration & OAuth DTO Models</a>](#step4-sec-2-2-1)
+* [<a id="idx-2-2-2">2.2.2 Media Upload & Post Scheduling DTO Models</a>](#step4-sec-2-2-2)
 
-###### 1.2.2.1.1.1 Action Items (Level 6)
-* <a id="step-1-2-2-1-1-1-1"></a>**Step 1.2.2.1.1.1.1:** Create file `supabase/migrations/20260101000002_create_storage_buckets.sql`
-* <a id="step-1-2-2-1-1-1-2"></a>**Step 1.2.2.1.1.1.2:** Update file `supabase/migrations/20260101000002_create_storage_buckets.sql` defining `videos` bucket rules.
-
----
-
-### 1.3.1 Token Encryption Vault Setup (Level 3)
-* [#1.3.1.1 PostgreSQL Vault Extension](#1311-postgresql-vault-extension)
-
-#### 1.3.1.1 PostgreSQL Vault Extension (Level 4)
-* [#1.3.1.1.1 Vault Script Creation](#13111-vault-script-creation)
-
-##### 1.3.1.1.1 Vault Script Creation (Level 5)
-* [#1.3.1.1.1.1 Action Items](#131111-action-items)
-
-###### 1.3.1.1.1.1 Action Items (Level 6)
-* <a id="step-1-3-1-1-1-1-1"></a>**Step 1.3.1.1.1.1.1:** Create file `supabase/migrations/20260101000003_enable_pgvault.sql`
-* <a id="step-1-3-1-1-1-1-2"></a>**Step 1.3.1.1.1.1.2:** Update file `supabase/migrations/20260101000003_enable_pgvault.sql` adding `pgsodium` / Vault secrets table schema.
+#### <a id="step3-sec-2-3">2.3 Ktor Client Service Integration</a>
+* [<a id="idx-2-3-1">2.3.1 Social Sync HTTP Client Configuration</a>](#step4-sec-2-3-1)
+* [<a id="idx-2-3-2">2.3.2 Bearer Token Authentication Interceptor</a>](#step4-sec-2-3-2)
 
 ---
 
-### 1.3.2 RLS Access Policies Configuration (Level 3)
-* [#1.3.2.1 Security Isolation Policies](#1321-security-isolation-policies)
+### 3. Ktor Backend Subsystem Setup
 
-#### 1.3.2.1 Security Isolation Policies (Level 4)
-* [#1.3.2.1.1 RLS Script Creation](#13211-rls-script-creation)
+#### <a id="step3-sec-3-1">3.1 Ktor Backend Engine Scaffolding</a>
+* [<a id="idx-3-1-1">3.1.1 Backend Project Directory Structure</a>](#step4-sec-3-1-1)
+* [<a id="idx-3-1-2">3.1.2 Ktor JVM Server Dependencies & Build Config</a>](#step4-sec-3-1-2)
 
-##### 1.3.2.1.1 RLS Script Creation (Level 5)
-* [#1.3.2.1.1.1 Action Items](#132111-action-items)
+#### <a id="step3-sec-3-2">3.2 Security & Authentication Middleware</a>
+* [<a id="idx-3-2-1">3.2.1 Supabase JWT Token Validator</a>](#step4-sec-3-2-1)
+* [<a id="idx-3-2-2">3.2.2 Cron Header Authentication Guard</a>](#step4-sec-3-2-2)
 
-###### 1.3.2.1.1.1 Action Items (Level 6)
-* <a id="step-1-3-2-1-1-1-1"></a>**Step 1.3.2.1.1.1.1:** Create file `supabase/migrations/20260101000004_configure_rls_policies.sql`
-* <a id="step-1-3-2-1-1-1-2"></a>**Step 1.3.2.1.1.1.2:** Update file `supabase/migrations/20260101000004_configure_rls_policies.sql` enabling RLS for `integrations` and `posts`.
-* <a id="step-1-3-2-1-1-1-3"></a>**Step 1.3.2.1.1.1.3:** Run command `supabase db push`
-
----
-
-## 2. Shared KMP Core Module
-
-### 2.1 Project Initialization & Build Setup (Level 2)
-* [#2.1.1 Multiplatform Module Structure](#211-multiplatform-module-structure)
-* [#2.1.2 Shared Gradle Dependencies](#212-shared-gradle-dependencies)
-
-### 2.2 Data Transfer Objects (DTOs) (Level 2)
-* [#2.2.1 Authentication & Integrations DTOs](#221-authentication--integrations-dtos)
-* [#2.2.2 Posts & Media DTOs](#222-posts--media-dtos)
-
-### 2.3 Shared Ktor API Client (Level 2)
-* [#2.3.1 Engine Interface & Serialization](#231-engine-interface--serialization)
+#### <a id="step3-sec-3-3">3.3 API Route Controllers & Cron Worker</a>
+* [<a id="idx-3-3-1">3.3.1 OAuth Integration Route Endpoints</a>](#step4-sec-3-3-1)
+* [<a id="idx-3-3-2">3.3.2 Media Upload & Post Scheduling Endpoints</a>](#step4-sec-3-3-2)
+* [<a id="idx-3-3-3">3.3.3 Background Scheduled Post Publisher Worker</a>](#step4-sec-3-3-3)
 
 ---
 
-### 2.1.1 Multiplatform Module Structure (Level 3)
-* [#2.1.1.1 Folder Tree Initialization](#2111-folder-tree-initialization)
+### 4. Compose Multiplatform Client Application
 
-#### 2.1.1.1 Folder Tree Initialization (Level 4)
-* [#2.1.1.1.1 Shared Core Path Creation](#21111-shared-core-path-creation)
+#### <a id="step3-sec-4-1">4.1 Compose Client Module Setup</a>
+* [<a id="idx-4-1-1">4.1.1 Client App Directory Structure</a>](#step4-sec-4-1-1)
+* [<a id="idx-4-1-2">4.1.2 Compose Multiplatform Build Setup</a>](#step4-sec-4-1-2)
 
-##### 2.1.1.1.1 Shared Core Path Creation (Level 5)
-* [#2.1.1.1.1.1 Action Items](#211111-action-items)
+#### <a id="step3-sec-4-2">4.2 UI Screens & ViewModels</a>
+* [<a id="idx-4-2-1">4.2.1 Connected Social Accounts Screen & ViewModel</a>](#step4-sec-4-2-1)
+* [<a id="idx-4-2-2">4.2.2 Video Upload & Scheduling Screen & ViewModel</a>](#step4-sec-4-2-2)
 
-###### 2.1.1.1.1.1 Action Items (Level 6)
-* <a id="step-2-1-1-1-1-1-1"></a>**Step 2.1.1.1.1.1.1:** Run command `mkdir -p shared`
-* <a id="step-2-1-1-1-1-1-2"></a>**Step 2.1.1.1.1.1.2:** Run command `mkdir -p shared/src/commonMain/kotlin/com/yourcompany/model`
-
----
-
-### 2.1.2 Shared Gradle Dependencies (Level 3)
-* [#2.1.2.1 Shared Build File Setup](#2121-shared-build-file-setup)
-
-#### 2.1.2.1 Shared Build File Setup (Level 4)
-* [#2.1.2.1.1 Gradle Configuration](#21211-gradle-configuration)
-
-##### 2.1.2.1.1 Gradle Configuration (Level 5)
-* [#2.1.2.1.1.1 Action Items](#212111-action-items)
-
-###### 2.1.2.1.1.1 Action Items (Level 6)
-* <a id="step-2-1-2-1-1-1-1"></a>**Step 2.1.2.1.1.1.1:** Create file `shared/build.gradle.kts`
-* <a id="step-2-1-2-1-1-1-2"></a>**Step 2.1.2.1.1.1.2:** Update file `shared/build.gradle.kts` adding `kotlinx.serialization` and `ktor-client-core` dependencies.
-* <a id="step-2-1-2-1-1-1-3"></a>**Step 2.1.2.1.1.1.3:** Update file `settings.gradle.kts` appending `include(":shared")`.
+#### <a id="step3-sec-4-3">4.3 Multiplatform Entry Points (Android, iOS, Web)</a>
+* [<a id="idx-4-3-1">4.3.1 Mobile Native Target Hosts (Android Activity & iOS ViewController)</a>](#step4-sec-4-3-1)
+* [<a id="idx-4-3-2">4.3.2 Web Target Main Entry Point (Wasm JS)</a>](#step4-sec-4-3-2)
 
 ---
 
-### 2.2.1 Authentication & Integrations DTOs (Level 3)
-* [#2.2.1.1 Integration Data Classes](#2211-integration-data-classes)
+### 5. Deployment & Infrastructure
 
-#### 2.2.1.1 Integration Data Classes (Level 4)
-* [#2.2.1.1.1 Model File Creation](#22111-model-file-creation)
+#### <a id="step3-sec-5-1">5.1 Vercel Serverless & Cron Configuration</a>
+* [<a id="idx-5-1-1">5.1.1 Serverless Deployment Config File</a>](#step4-sec-5-1-1)
+* [<a id="idx-5-1-2">5.1.2 Vercel CLI Project Linking</a>](#step4-sec-5-1-2)
 
-##### 2.2.1.1.1 Model File Creation (Level 5)
-* [#2.2.1.1.1.1 Action Items](#221111-action-items)
-
-###### 2.2.1.1.1.1 Action Items (Level 6)
-* <a id="step-2-2-1-1-1-1-1"></a>**Step 2.2.1.1.1.1.1:** Create file `shared/src/commonMain/kotlin/com/yourcompany/model/IntegrationDto.kt`
-* <a id="step-2-2-1-1-1-1-2"></a>**Step 2.2.1.1.1.1.2:** Create file `shared/src/commonMain/kotlin/com/yourcompany/model/OAuthUrlDto.kt`
+#### <a id="step3-sec-5-2">5.2 Build Verification & Production Deployment</a>
+* [<a id="idx-5-2-1">5.2.1 Gradle Suite Compilation & Test Run</a>](#step4-sec-5-2-1)
+* [<a id="idx-5-2-2">5.2.2 Production Deployment Execution</a>](#step4-sec-5-2-2)
 
 ---
 
-### 2.2.2 Posts & Media DTOs (Level 3)
-* [#2.2.2.1 Media & Scheduling Data Classes](#2221-media--scheduling-data-classes)
+## Iteration Step 4: Complete Atomic Action Plan (All Levels down to Atomic Actions)
 
-#### 2.2.2.1 Media & Scheduling Data Classes (Level 4)
-* [#2.2.2.1.1 Post Model File Creation](#22211-post-model-file-creation)
+### 1. Database & Vault Subsystem Setup
 
-##### 2.2.2.1.1 Post Model File Creation (Level 5)
-* [#2.2.2.1.1.1 Action Items](#222111-action-items)
+#### 1.1 Local Supabase Scaffolding
 
-###### 2.2.2.1.1.1 Action Items (Level 6)
-* <a id="step-2-2-2-1-1-1-1"></a>**Step 2.2.2.1.1.1.1:** Create file `shared/src/commonMain/kotlin/com/yourcompany/model/MediaUploadDto.kt`
-* <a id="step-2-2-2-1-1-1-2"></a>**Step 2.2.2.1.1.1.2:** Create file `shared/src/commonMain/kotlin/com/yourcompany/model/PostRequestDto.kt`
-* <a id="step-2-2-2-1-1-1-3"></a>**Step 2.2.2.1.1.1.3:** Create file `shared/src/commonMain/kotlin/com/yourcompany/model/PostResponseDto.kt`
+##### <a id="step4-sec-1-1-1">1.1.1 Directory Structure Setup</a>
+* **Action 1.1.1.1:** Run command `mkdir -p supabase`
+* **Action 1.1.1.2:** Run command `mkdir -p supabase/migrations`
 
----
-
-### 2.3.1 Engine Interface & Serialization (Level 3)
-* [#2.3.1.1 Shared API Client Service](#2311-shared-api-client-service)
-
-#### 2.3.1.1 Shared API Client Service (Level 4)
-* [#2.3.1.1.1 Client File Setup](#23111-client-file-setup)
-
-##### 2.3.1.1.1 Client File Setup (Level 5)
-* [#2.3.1.1.1.1 Action Items](#231111-action-items)
-
-###### 2.3.1.1.1.1 Action Items (Level 6)
-* <a id="step-2-3-1-1-1-1-1"></a>**Step 2.3.1.1.1.1.1:** Create file `shared/src/commonMain/kotlin/com/yourcompany/client/SocialSyncApiClient.kt`
-* <a id="step-2-3-1-1-1-1-2"></a>**Step 2.3.1.1.1.1.2:** Update file `shared/src/commonMain/kotlin/com/yourcompany/client/SocialSyncApiClient.kt` adding Auth Bearer interceptor.
+##### <a id="step4-sec-1-1-2">1.1.2 CLI Configuration & Project Setup</a>
+* **Action 1.1.2.1:** Run command `supabase init`
+* **Action 1.1.2.2:** Create file `supabase/config.toml` configuring local project ID `social-sync-backend`.
 
 ---
 
-## 3. Ktor Backend Subsystem Setup
+#### 1.2 Relational Database Schema & Storage Bucket
 
-### 3.1 Ktor Engine Project Scaffolding (Level 2)
-* [#3.1.1 Backend Module Structure](#311-backend-module-structure)
-* [#3.1.2 Backend Gradle Dependencies](#312-backend-gradle-dependencies)
+##### <a id="step4-sec-1-2-1">1.2.1 Integrations Table Migration</a>
+* **Action 1.2.1.1:** Create file `supabase/migrations/20260101000000_create_integrations.sql`
+* **Action 1.2.1.2:** Populate `supabase/migrations/20260101000000_create_integrations.sql` with SQL schema for `integrations`.
 
-### 3.2 Authentication & Security Middleware (Level 2)
-* [#3.2.1 JWT Verification & Cron Guard](#321-jwt-verification--cron-guard)
+##### <a id="step4-sec-1-2-2">1.2.2 Posts & Target Publishing Tables Migration</a>
+* **Action 1.2.2.1:** Create file `supabase/migrations/20260101000001_create_posts_and_targets.sql`
+* **Action 1.2.2.2:** Populate `supabase/migrations/20260101000001_create_posts_and_targets.sql` with `posts` and `post_targets` SQL schema.
 
-### 3.3 Endpoint Route Controllers (Level 2)
-* [#3.3.1 Integration Routes](#331-integration-routes)
-* [#3.3.2 Media & Post Routes](#332-media--post-routes)
-* [#3.3.3 Cron Task Route](#333-cron-task-route)
-
----
-
-### 3.1.1 Backend Module Structure (Level 3)
-* [#3.1.1.1 Ktor Directory Initialization](#3111-ktor-directory-initialization)
-
-#### 3.1.1.1 Ktor Directory Initialization (Level 4)
-* [#3.1.1.1.1 Backend Directory Scaffolding](#31111-backend-directory-scaffolding)
-
-##### 3.1.1.1.1 Backend Directory Scaffolding (Level 5)
-* [#3.1.1.1.1.1 Action Items](#311111-action-items)
-
-###### 3.1.1.1.1.1 Action Items (Level 6)
-* <a id="step-3-1-1-1-1-1-1"></a>**Step 3.1.1.1.1.1.1:** Run command `mkdir -p backend-ktor`
-* <a id="step-3-1-1-1-1-1-2"></a>**Step 3.1.1.1.1.1.2:** Run command `mkdir -p backend-ktor/src/main/kotlin/com/yourcompany/backend/routes`
+##### <a id="step4-sec-1-2-3">1.2.3 Media Storage Bucket Configuration</a>
+* **Action 1.2.3.1:** Create file `supabase/migrations/20260101000002_create_storage_buckets.sql`
+* **Action 1.2.3.2:** Populate `supabase/migrations/20260101000002_create_storage_buckets.sql` with `videos` bucket configuration.
 
 ---
 
-### 3.1.2 Backend Gradle Dependencies (Level 3)
-* [#3.1.2.1 Ktor JVM Build Config](#3121-ktor-jvm-build-config)
+#### 1.3 PostgreSQL Vault Encryption & Row-Level Security
 
-#### 3.1.2.1 Ktor JVM Build Config (Level 4)
-* [#3.1.2.1.1 Backend Gradle Setup](#31211-backend-gradle-setup)
+##### <a id="step4-sec-1-3-1">1.3.1 Pgsodium Vault Encryption Setup</a>
+* **Action 1.3.1.1:** Create file `supabase/migrations/20260101000003_enable_pgvault.sql`
+* **Action 1.3.1.2:** Populate `supabase/migrations/20260101000003_enable_pgvault.sql` with `pgsodium` extension setup.
 
-##### 3.1.2.1.1 Backend Gradle Setup (Level 5)
-* [#3.1.2.1.1.1 Action Items](#312111-action-items)
-
-###### 3.1.2.1.1.1 Action Items (Level 6)
-* <a id="step-3-1-2-1-1-1-1"></a>**Step 3.1.2.1.1.1.1:** Create file `backend-ktor/build.gradle.kts`
-* <a id="step-3-1-2-1-1-1-2"></a>**Step 3.1.2.1.1.1.2:** Update file `backend-ktor/build.gradle.kts` adding Ktor Server Netty and Supabase Java dependencies.
-* <a id="step-3-1-2-1-1-1-3"></a>**Step 3.1.2.1.1.1.3:** Update file `settings.gradle.kts` appending `include(":backend-ktor")`.
+##### <a id="step4-sec-1-3-2">1.3.2 Row Level Security (RLS) Isolation Policies</a>
+* **Action 1.3.2.1:** Create file `supabase/migrations/20260101000004_configure_rls_policies.sql`
+* **Action 1.3.2.2:** Populate `supabase/migrations/20260101000004_configure_rls_policies.sql` with RLS policies for `integrations` and `posts`.
+* **Action 1.3.2.3:** Run command `supabase db push`
 
 ---
 
-### 3.2.1 JWT Verification & Cron Guard (Level 3)
-* [#3.2.1.1 Security Plugin Implementation](#3211-security-plugin-implementation)
+### 2. Shared KMP Core Module
 
-#### 3.2.1.1 Security Plugin Implementation (Level 4)
-* [#3.2.1.1.1 Backend Middleware Files](#32111-backend-middleware-files)
+#### 2.1 Shared Module Gradle Scaffolding
 
-##### 3.2.1.1.1 Backend Middleware Files (Level 5)
-* [#3.2.1.1.1.1 Action Items](#321111-action-items)
+##### <a id="step4-sec-2-1-1">2.1.1 Shared Directory Tree Initialization</a>
+* **Action 2.1.1.1:** Run command `mkdir -p shared`
+* **Action 2.1.1.2:** Run command `mkdir -p shared/src/commonMain/kotlin/com/yourcompany/model`
+* **Action 2.1.1.3:** Run command `mkdir -p shared/src/commonMain/kotlin/com/yourcompany/client`
 
-###### 3.2.1.1.1.1 Action Items (Level 6)
-* <a id="step-3-2-1-1-1-1-1"></a>**Step 3.2.1.1.1.1.1:** Create file `backend-ktor/src/main/kotlin/com/yourcompany/backend/Security.kt`
-* <a id="step-3-2-1-1-1-1-2"></a>**Step 3.2.1.1.1.1.2:** Update file `backend-ktor/src/main/kotlin/com/yourcompany/backend/Security.kt` setting up Supabase JWT validator and `X-Cron-Secret` header guard.
-
----
-
-### 3.3.1 Integration Routes (Level 3)
-* [#3.3.1.1 OAuth Route Controller](#3311-oauth-route-controller)
-
-#### 3.3.1.1 OAuth Route Controller (Level 4)
-* [#3.3.1.1.1 Integration Handlers](#33111-integration-handlers)
-
-##### 3.3.1.1.1 Integration Handlers (Level 5)
-* [#3.3.1.1.1.1 Action Items](#331111-action-items)
-
-###### 3.3.1.1.1.1 Action Items (Level 6)
-* <a id="step-3-3-1-1-1-1-1"></a>**Step 3.3.1.1.1.1.1:** Create file `backend-ktor/src/main/kotlin/com/yourcompany/backend/routes/IntegrationRoutes.kt`
-* <a id="step-3-3-1-1-1-1-2"></a>**Step 3.3.1.1.1.1.2:** Update file `backend-ktor/src/main/kotlin/com/yourcompany/backend/routes/IntegrationRoutes.kt` adding `/integrations` GET and POST callback endpoints.
+##### <a id="step4-sec-2-1-2">2.1.2 Shared Module Build Dependencies</a>
+* **Action 2.1.2.1:** Create file `shared/build.gradle.kts`
+* **Action 2.1.2.2:** Populate `shared/build.gradle.kts` with `kotlinx.serialization` and `ktor-client-core` dependencies.
+* **Action 2.1.2.3:** Update file `settings.gradle.kts` adding `include(":shared")`.
 
 ---
 
-### 3.3.2 Media & Post Routes (Level 3)
-* [#3.3.2.1 Upload and Scheduling Controllers](#3321-upload-and-scheduling-controllers)
+#### 2.2 Data Transfer Objects (DTOs)
 
-#### 3.3.2.1 Upload and Scheduling Controllers (Level 4)
-* [#3.3.2.1.1 Post Route Files](#33211-post-route-files)
+##### <a id="step4-sec-2-2-1">2.2.1 Integration & OAuth DTO Models</a>
+* **Action 2.2.1.1:** Create file `shared/src/commonMain/kotlin/com/yourcompany/model/IntegrationDto.kt`
+* **Action 2.2.1.2:** Create file `shared/src/commonMain/kotlin/com/yourcompany/model/OAuthUrlDto.kt`
 
-##### 3.3.2.1.1 Post Route Files (Level 5)
-* [#3.3.2.1.1.1 Action Items](#332111-action-items)
-
-###### 3.3.2.1.1.1 Action Items (Level 6)
-* <a id="step-3-3-2-1-1-1-1"></a>**Step 3.3.2.1.1.1.1:** Create file `backend-ktor/src/main/kotlin/com/yourcompany/backend/routes/MediaRoutes.kt`
-* <a id="step-3-3-2-1-1-1-2"></a>**Step 3.3.2.1.1.1.2:** Create file `backend-ktor/src/main/kotlin/com/yourcompany/backend/routes/PostRoutes.kt`
+##### <a id="step4-sec-2-2-2">2.2.2 Media Upload & Post Scheduling DTO Models</a>
+* **Action 2.2.2.1:** Create file `shared/src/commonMain/kotlin/com/yourcompany/model/MediaUploadDto.kt`
+* **Action 2.2.2.2:** Create file `shared/src/commonMain/kotlin/com/yourcompany/model/PostRequestDto.kt`
+* **Action 2.2.2.3:** Create file `shared/src/commonMain/kotlin/com/yourcompany/model/PostResponseDto.kt`
 
 ---
 
-### 3.3.3 Cron Task Route (Level 3)
-* [#3.3.3.1 Background Publisher Worker](#3331-background-publisher-worker)
+#### 2.3 Ktor Client Service Integration
 
-#### 3.3.3.1 Background Publisher Worker (Level 4)
-* [#3.3.3.1.1 Cron Controller Files](#33311-cron-controller-files)
+##### <a id="step4-sec-2-3-1">2.3.1 Social Sync HTTP Client Configuration</a>
+* **Action 2.3.1.1:** Create file `shared/src/commonMain/kotlin/com/yourcompany/client/SocialSyncApiClient.kt`
+* **Action 2.3.1.2:** Populate `shared/src/commonMain/kotlin/com/yourcompany/client/SocialSyncApiClient.kt` with Ktor client instance.
 
-##### 3.3.3.1.1 Cron Controller Files (Level 5)
-* [#3.3.3.1.1.1 Action Items](#333111-action-items)
-
-###### 3.3.3.1.1.1 Action Items (Level 6)
-* <a id="step-3-3-3-1-1-1-1"></a>**Step 3.3.3.1.1.1.1:** Create file `backend-ktor/src/main/kotlin/com/yourcompany/backend/routes/CronRoutes.kt`
-* <a id="step-3-3-3-1-1-1-2"></a>**Step 3.3.3.1.1.1.2:** Create file `backend-ktor/src/main/kotlin/com/yourcompany/backend/services/SocialPublisherService.kt`
-* <a id="step-3-3-3-1-1-1-3"></a>**Step 3.3.3.1.1.1.3:** Create file `backend-ktor/src/main/kotlin/com/yourcompany/backend/Application.kt` connecting security plugin and all route modules.
+##### <a id="step4-sec-2-3-2">2.3.2 Bearer Token Authentication Interceptor</a>
+* **Action 2.3.2.1:** Create file `shared/src/commonMain/kotlin/com/yourcompany/client/AuthInterceptor.kt`
+* **Action 2.3.2.2:** Populate `shared/src/commonMain/kotlin/com/yourcompany/client/AuthInterceptor.kt` with Supabase JWT bearer injection logic.
 
 ---
 
-## 4. Compose Multiplatform Client Application
+### 3. Ktor Backend Subsystem Setup
 
-### 4.1 Frontend App Structure Initialization (Level 2)
-* [#4.1.1 Client App Module Setup](#411-client-app-module-setup)
-* [#4.1.2 Client App Build Configuration](#412-client-app-build-configuration)
+#### 3.1 Ktor Backend Engine Scaffolding
 
-### 4.2 Shared UI Screen Implementations (Level 2)
-* [#4.2.1 Authorization & Integration Screen](#421-authorization--integration-screen)
-* [#4.2.2 Media Selection & Scheduling Screen](#422-media-selection--scheduling-screen)
+##### <a id="step4-sec-3-1-1">3.1.1 Backend Project Directory Structure</a>
+* **Action 3.1.1.1:** Run command `mkdir -p backend-ktor`
+* **Action 3.1.1.2:** Run command `mkdir -p backend-ktor/src/main/kotlin/com/yourcompany/backend/routes`
+* **Action 3.1.1.3:** Run command `mkdir -p backend-ktor/src/main/kotlin/com/yourcompany/backend/services`
 
-### 4.3 Target Platforms Integration (Level 2)
-* [#4.3.1 Android, iOS & Web Entry Points](#431-android-ios--web-entry-points)
-
----
-
-### 4.1.1 Client App Module Setup (Level 3)
-* [#4.1.1.1 Compose Directory Scaffolding](#4111-compose-directory-scaffolding)
-
-#### 4.1.1.1 Compose Directory Scaffolding (Level 4)
-* [#4.1.1.1.1 Client Directory Path Creation](#41111-client-directory-path-creation)
-
-##### 4.1.1.1.1 Client Directory Path Creation (Level 5)
-* [#4.1.1.1.1.1 Action Items](#411111-action-items)
-
-###### 4.1.1.1.1.1 Action Items (Level 6)
-* <a id="step-4-1-1-1-1-1-1"></a>**Step 4.1.1.1.1.1.1:** Run command `mkdir -p composeApp`
-* <a id="step-4-1-1-1-1-1-2"></a>**Step 4.1.1.1.1.1.2:** Run command `mkdir -p composeApp/src/commonMain/kotlin/com/yourcompany/ui`
+##### <a id="step4-sec-3-1-2">3.1.2 Ktor JVM Server Dependencies & Build Config</a>
+* **Action 3.1.2.1:** Create file `backend-ktor/build.gradle.kts`
+* **Action 3.1.2.2:** Populate `backend-ktor/build.gradle.kts` with Ktor Server Netty and Supabase dependencies.
+* **Action 3.1.2.3:** Update file `settings.gradle.kts` adding `include(":backend-ktor")`.
 
 ---
 
-### 4.1.2 Client App Build Configuration (Level 3)
-* [#4.1.2.1 Compose Multiplatform Gradle Config](#4121-compose-multiplatform-gradle-config)
+#### 3.2 Security & Authentication Middleware
 
-#### 4.1.2.1 Compose Multiplatform Gradle Config (Level 4)
-* [#4.1.2.1.1 App Build File Setup](#41211-app-build-file-setup)
+##### <a id="step4-sec-3-2-1">3.2.1 Supabase JWT Token Validator</a>
+* **Action 3.2.1.1:** Create file `backend-ktor/src/main/kotlin/com/yourcompany/backend/JwtSecurity.kt`
+* **Action 3.2.1.2:** Populate `backend-ktor/src/main/kotlin/com/yourcompany/backend/JwtSecurity.kt` with JWT verification.
 
-##### 4.1.2.1.1 App Build File Setup (Level 5)
-* [#4.1.2.1.1.1 Action Items](#412111-action-items)
-
-###### 4.1.2.1.1.1 Action Items (Level 6)
-* <a id="step-4-1-2-1-1-1-1"></a>**Step 4.1.2.1.1.1.1:** Create file `composeApp/build.gradle.kts`
-* <a id="step-4-1-2-1-1-1-2"></a>**Step 4.1.2.1.1.1.2:** Update file `composeApp/build.gradle.kts` configuring Compose targets (Android, iOS, WasmJs).
-* <a id="step-4-1-2-1-1-1-3"></a>**Step 4.1.2.1.1.1.3:** Update file `settings.gradle.kts` appending `include(":composeApp")`.
+##### <a id="step4-sec-3-2-2">3.2.2 Cron Header Authentication Guard</a>
+* **Action 3.2.2.1:** Create file `backend-ktor/src/main/kotlin/com/yourcompany/backend/CronSecurity.kt`
+* **Action 3.2.2.2:** Populate `backend-ktor/src/main/kotlin/com/yourcompany/backend/CronSecurity.kt` verifying `X-Cron-Secret` header.
 
 ---
 
-### 4.2.1 Authorization & Integration Screen (Level 3)
-* [#4.2.1.1 Social Connections Screen](#4211-social-connections-screen)
+#### 3.3 API Route Controllers & Cron Worker
 
-#### 4.2.1.1 Social Connections Screen (Level 4)
-* [#4.2.1.1.1 Integration UI Composable Files](#42111-integration-ui-composable-files)
+##### <a id="step4-sec-3-3-1">3.3.1 OAuth Integration Route Endpoints</a>
+* **Action 3.3.1.1:** Create file `backend-ktor/src/main/kotlin/com/yourcompany/backend/routes/IntegrationRoutes.kt`
+* **Action 3.3.1.2:** Populate `backend-ktor/src/main/kotlin/com/yourcompany/backend/routes/IntegrationRoutes.kt` with OAuth endpoints.
 
-##### 4.2.1.1.1 Integration UI Composable Files (Level 5)
-* [#4.2.1.1.1.1 Action Items](#421111-action-items)
+##### <a id="step4-sec-3-3-2">3.3.2 Media Upload & Post Scheduling Endpoints</a>
+* **Action 3.3.2.1:** Create file `backend-ktor/src/main/kotlin/com/yourcompany/backend/routes/MediaRoutes.kt`
+* **Action 3.3.2.2:** Create file `backend-ktor/src/main/kotlin/com/yourcompany/backend/routes/PostRoutes.kt`
 
-###### 4.2.1.1.1.1 Action Items (Level 6)
-* <a id="step-4-2-1-1-1-1-1"></a>**Step 4.2.1.1.1.1.1:** Create file `composeApp/src/commonMain/kotlin/com/yourcompany/ui/IntegrationsScreen.kt`
-* <a id="step-4-2-1-1-1-1-2"></a>**Step 4.2.1.1.1.1.2:** Create file `composeApp/src/commonMain/kotlin/com/yourcompany/ui/IntegrationsViewModel.kt`
-
----
-
-### 4.2.2 Media Selection & Scheduling Screen (Level 3)
-* [#4.2.2.1 Video Posting Screen](#4221-video-posting-screen)
-
-#### 4.2.2.1 Video Posting Screen (Level 4)
-* [#4.2.2.1.1 Posting UI Composable Files](#42211-posting-ui-composable-files)
-
-##### 4.2.2.1.1 Posting UI Composable Files (Level 5)
-* [#4.2.2.1.1.1 Action Items](#422111-action-items)
-
-###### 4.2.2.1.1.1 Action Items (Level 6)
-* <a id="step-4-2-2-1-1-1-1"></a>**Step 4.2.2.1.1.1.1:** Create file `composeApp/src/commonMain/kotlin/com/yourcompany/ui/CreatePostScreen.kt`
-* <a id="step-4-2-2-1-1-1-2"></a>**Step 4.2.2.1.1.1.2:** Create file `composeApp/src/commonMain/kotlin/com/yourcompany/ui/CreatePostViewModel.kt`
+##### <a id="step4-sec-3-3-3">3.3.3 Background Scheduled Post Publisher Worker</a>
+* **Action 3.3.3.1:** Create file `backend-ktor/src/main/kotlin/com/yourcompany/backend/routes/CronRoutes.kt`
+* **Action 3.3.3.2:** Create file `backend-ktor/src/main/kotlin/com/yourcompany/backend/services/SocialPublisherService.kt`
+* **Action 3.3.3.3:** Create file `backend-ktor/src/main/kotlin/com/yourcompany/backend/Application.kt` binding route controllers.
 
 ---
 
-### 4.3.1 Android, iOS & Web Entry Points (Level 3)
-* [#4.3.1.1 Native Platform Entrypoints](#4311-native-platform-entrypoints)
+### 4. Compose Multiplatform Client Application
 
-#### 4.3.1.1 Native Platform Entrypoints (Level 4)
-* [#4.3.1.1.1 Entrypoint Files Setup](#43111-entrypoint-files-setup)
+#### 4.1 Compose Client Module Setup
 
-##### 4.3.1.1.1 Entrypoint Files Setup (Level 5)
-* [#4.3.1.1.1.1 Action Items](#431111-action-items)
+##### <a id="step4-sec-4-1-1">4.1.1 Client App Directory Structure</a>
+* **Action 4.1.1.1:** Run command `mkdir -p composeApp`
+* **Action 4.1.1.2:** Run command `mkdir -p composeApp/src/commonMain/kotlin/com/yourcompany/ui`
 
-###### 4.3.1.1.1.1 Action Items (Level 6)
-* <a id="step-4-3-1-1-1-1-1"></a>**Step 4.3.1.1.1.1.1:** Create file `composeApp/src/androidMain/kotlin/com/yourcompany/MainActivity.kt`
-* <a id="step-4-3-1-1-1-1-2"></a>**Step 4.3.1.1.1.1.2:** Create file `composeApp/src/iosMain/kotlin/com/yourcompany/MainViewController.kt`
-* <a id="step-4-3-1-1-1-1-3"></a>**Step 4.3.1.1.1.1.3:** Create file `composeApp/src/wasmJsMain/kotlin/com/yourcompany/main.kt`
-
----
-
-## 5. Deployment & Automation Infrastructure
-
-### 5.1 Vercel Serverless & Cron Configuration (Level 2)
-* [#5.1.1 Vercel Deployment Config](#511-vercel-deployment-config)
-
-### 5.2 Build Verification & Deployment Pipeline (Level 2)
-* [#5.2.1 Automated Build Verification](#521-automated-build-verification)
+##### <a id="step4-sec-4-1-2">4.1.2 Compose Multiplatform Build Setup</a>
+* **Action 4.1.1.3:** Create file `composeApp/build.gradle.kts`
+* **Action 4.1.1.4:** Populate `composeApp/build.gradle.kts` with targets (Android, iOS, WasmJs).
+* **Action 4.1.1.5:** Update file `settings.gradle.kts` adding `include(":composeApp")`.
 
 ---
 
-### 5.1.1 Vercel Deployment Config (Level 3)
-* [#5.1.1.1 Vercel Configuration Setup](#5111-vercel-configuration-setup)
+#### 4.2 UI Screens & ViewModels
 
-#### 5.1.1.1 Vercel Configuration Setup (Level 4)
-* [#5.1.1.1.1 Config File Creation](#51111-config-file-creation)
+##### <a id="step4-sec-4-2-1">4.2.1 Connected Social Accounts Screen & ViewModel</a>
+* **Action 4.2.1.1:** Create file `composeApp/src/commonMain/kotlin/com/yourcompany/ui/IntegrationsScreen.kt`
+* **Action 4.2.1.2:** Create file `composeApp/src/commonMain/kotlin/com/yourcompany/ui/IntegrationsViewModel.kt`
 
-##### 5.1.1.1.1 Config File Creation (Level 5)
-* [#5.1.1.1.1.1 Action Items](#511111-action-items)
-
-###### 5.1.1.1.1.1 Action Items (Level 6)
-* <a id="step-5-1-1-1-1-1-1"></a>**Step 5.1.1.1.1.1.1:** Create file `backend-ktor/vercel.json` defining Kotlin JVM function builds and daily cron schedule.
-* <a id="step-5-1-1-1-1-1-2"></a>**Step 5.1.1.1.1.1.2:** Run command `vercel link --yes`
+##### <a id="step4-sec-4-2-2">4.2.2 Video Upload & Scheduling Screen & ViewModel</a>
+* **Action 4.2.2.1:** Create file `composeApp/src/commonMain/kotlin/com/yourcompany/ui/CreatePostScreen.kt`
+* **Action 4.2.2.2:** Create file `composeApp/src/commonMain/kotlin/com/yourcompany/ui/CreatePostViewModel.kt`
 
 ---
 
-### 5.2.1 Automated Build Verification (Level 3)
-* [#5.2.1.1 Gradle & Deployment Pipeline Execution](#5211-gradle--deployment-pipeline-execution)
+#### 4.3 Multiplatform Entry Points (Android, iOS, Web)
 
-#### 5.2.1.1 Gradle & Deployment Pipeline Execution (Level 4)
-* [#5.2.1.1.1 Deployment Execution Items](#52111-deployment-execution-items)
+##### <a id="step4-sec-4-3-1">4.3.1 Mobile Native Target Hosts (Android Activity & iOS ViewController)</a>
+* **Action 4.3.1.1:** Create file `composeApp/src/androidMain/kotlin/com/yourcompany/MainActivity.kt`
+* **Action 4.3.1.2:** Create file `composeApp/src/iosMain/kotlin/com/yourcompany/MainViewController.kt`
 
-##### 5.2.1.1.1 Deployment Execution Items (Level 5)
-* [#5.2.1.1.1.1 Action Items](#521111-action-items)
+##### <a id="step4-sec-4-3-2">4.3.2 Web Target Main Entry Point (Wasm JS)</a>
+* **Action 4.3.2.1:** Create file `composeApp/src/wasmJsMain/kotlin/com/yourcompany/main.kt`
+* **Action 4.3.2.2:** Create file `composeApp/src/wasmJsMain/resources/index.html`
 
-###### 5.2.1.1.1.1 Action Items (Level 6)
-* <a id="step-5-2-1-1-1-1-1"></a>**Step 5.2.1.1.1.1.1:** Run command `./gradlew check`
-* <a id="step-5-2-1-1-1-1-2"></a>**Step 5.2.1.1.1.1.2:** Run command `vercel --prod`
+---
+
+### 5. Deployment & Infrastructure
+
+#### 5.1 Vercel Serverless & Cron Configuration
+
+##### <a id="step4-sec-5-1-1">5.1.1 Serverless Deployment Config File</a>
+* **Action 5.1.1.1:** Create file `backend-ktor/vercel.json`
+* **Action 5.1.1.2:** Populate `backend-ktor/vercel.json` with JVM build and daily cron definition.
+
+##### <a id="step4-sec-5-1-2">5.1.2 Vercel CLI Project Linking</a>
+* **Action 5.1.2.1:** Run command `vercel link --yes`
+* **Action 5.1.2.2:** Run command `vercel env pull .env.local`
+
+---
+
+#### 5.2 Build Verification & Production Deployment
+
+##### <a id="step4-sec-5-2-1">5.2.1 Gradle Suite Compilation & Test Run</a>
+* **Action 5.2.1.1:** Run command `./gradlew check`
+* **Action 5.2.1.2:** Run command `./gradlew :backend-ktor:build`
+
+##### <a id="step4-sec-5-2-2">5.2.2 Production Deployment Execution</a>
+* **Action 5.2.2.1:** Run command `supabase db push --linked`
+* **Action 5.2.2.2:** Run command `vercel --prod`
